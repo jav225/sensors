@@ -16,11 +16,11 @@ export default class Accelerometer extends Component {
         this.state = {
             x: 0,
             y: 0,
-            z: 0,
-            isOn: false,
+            z: 0
         }
     }
     componentDidMount() {
+        SensorManager.startAccelerometer(100)
         DeviceEventEmitter.addListener('Accelerometer', (data) => {
             this.setState({
                 ...this.state,
@@ -30,39 +30,13 @@ export default class Accelerometer extends Component {
             })
         })
     }
-    toggleSwitch() {
-        this.setState({
-            ...this.state,
-            isOn: !isOn,
-        })
-        if (isOn) {
-            SensorManager.startAccelerometer(100)
-        } else {
-            SensorManager.stopAccelerometer()
-        }
-    }
     render() {
         return (
             <View style={styles.container}>
-                <View style={styles.headlineContainer}>
-                    <Text style={styles.headline}>Accelerometer values:</Text>
-                    <Switch
-                        value={this.state.isOn}
-                        onValueChange={this.toggleSwitch} />
-                </View>
-                {
-                    this.state.isOn ?
-                        (
-                            <View>
-                                <Value name="x" value={this.state.x} />
-                                <Value name="y" value={this.state.y} />
-                                <Value name="z" value={this.state.z} />
-                            </View>
-                        ) : (
-                            <View></View>
-                        )
-                }
-
+                <Text style={styles.headline}>Accelerometer values</Text>
+                <Value name="x" value={this.state.x} />
+                <Value name="y" value={this.state.y} />
+                <Value name="z" value={this.state.z} />
             </View>
         )
     }
@@ -74,9 +48,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#F5FCFF',
-    },
-    headlineContainer: {
-        flexDirection: 'row',
     },
     headline: {
         fontSize: 30,
